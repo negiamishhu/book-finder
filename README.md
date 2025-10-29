@@ -2,6 +2,8 @@
 
 A modern React application for finding books using the Open Library Search API. Built for Alex, a college student who wants to search for books in multiple ways.
 
+🌐 **Live Demo**: [https://book-finder-git-main-amishus-projects.vercel.app/](https://book-finder-git-main-amishus-projects.vercel.app/)
+
 ## Features
 
 - 🔍 **Multiple Search Options**: Search by title, author, or subject
