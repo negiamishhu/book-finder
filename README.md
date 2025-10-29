@@ -78,7 +78,4 @@ book-finder/
 ├── vite.config.js
 └── tailwind.config.js
 ```
-
-## License
-
-MIT
+ 
