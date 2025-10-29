@@ -4,7 +4,6 @@ import SearchBar from './components/SearchBar'
 import WelcomePage from './components/WelcomePage'
 import BookDetails from './components/BookDetails'
 import RotatingQuotes from './components/RotatingQuotes'
-import SwipeableBookGrid from './components/SwipeableBookGrid'
 
 function App() {
   const [books, setBooks] = useState([])
@@ -104,7 +103,7 @@ function App() {
                 <h2 className="text-2xl font-semibold text-gray-700 mb-6 px-2">
                   Found {books.length} book{books.length !== 1 ? 's' : ''}
                 </h2>
-                <SwipeableBookGrid>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 lg:gap-10 px-2">
                   {books.map((book, index) => (
                     <BookCard
                       key={`${book.key}-${index}`}
@@ -112,7 +111,7 @@ function App() {
                       onViewDetails={setSelectedBook}
                     />
                   ))}
-                </SwipeableBookGrid>
+                </div>
               </>
             )}
           </div>
