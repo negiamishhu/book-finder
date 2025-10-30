@@ -8,8 +8,7 @@ const FilterAndSort = ({ books, onFilterChange, onSortChange }) => {
   const [sortBy, setSortBy] = useState('relevance')
   const [isExpanded, setIsExpanded] = useState(true)
 
-  // Extract unique authors and subjects from books
-  const uniqueAuthors = useMemo(() => {
+   const uniqueAuthors = useMemo(() => {
     const authors = new Set()
     books.forEach(book => {
       if (book.author_name && Array.isArray(book.author_name)) {
@@ -33,8 +32,7 @@ const FilterAndSort = ({ books, onFilterChange, onSortChange }) => {
     return Array.from(subjects).sort()
   }, [books])
 
-  // Get min and max years from books
-  const yearRange = useMemo(() => {
+   const yearRange = useMemo(() => {
     const years = books
       .map(book => book.first_publish_year)
       .filter(year => year && year > 0)
@@ -117,8 +115,7 @@ const FilterAndSort = ({ books, onFilterChange, onSortChange }) => {
 
   return (
     <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-xl shadow-lg dark:shadow-gray-900/50 mb-6 border border-gray-200/50 dark:border-gray-700/50 overflow-hidden transition-all duration-300">
-      {/* Header */}
-      <div 
+       <div 
         className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 border-b border-gray-200 dark:border-gray-700 cursor-pointer hover:from-blue-100 hover:to-indigo-100 dark:hover:from-gray-800 transition-all"
         onClick={() => setIsExpanded(!isExpanded)}
       >
@@ -160,11 +157,9 @@ const FilterAndSort = ({ books, onFilterChange, onSortChange }) => {
         </div>
       </div>
 
-      {/* Filter Content */}
-      {isExpanded && (
+       {isExpanded && (
         <div className="p-6 space-y-6 overflow-visible">
-          {/* Active Filters Display */}
-          {hasActiveFilters && (
+           {hasActiveFilters && (
             <div className="flex flex-wrap items-center gap-2 pb-4 border-b border-gray-200 dark:border-gray-700">
             <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Active:</span>
             {authorFilter && (
@@ -202,10 +197,8 @@ const FilterAndSort = ({ books, onFilterChange, onSortChange }) => {
           </div>
           )}
 
-          {/* Filters Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* Author Filter */}
-            <div className="space-y-2">
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+             <div className="space-y-2">
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
                 <svg className="w-4 h-4 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
@@ -235,8 +228,7 @@ const FilterAndSort = ({ books, onFilterChange, onSortChange }) => {
               </div>
             </div>
 
-            {/* Subject Filter */}
-            <div className="space-y-2">
+             <div className="space-y-2">
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
                 <svg className="w-4 h-4 text-purple-600 dark:text-purple-400" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5a.997.997 0 01.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
@@ -266,8 +258,7 @@ const FilterAndSort = ({ books, onFilterChange, onSortChange }) => {
               </div>
             </div>
 
-            {/* Year Range */}
-            <div className="space-y-2">
+             <div className="space-y-2">
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
                 <svg className="w-4 h-4 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
@@ -313,8 +304,7 @@ const FilterAndSort = ({ books, onFilterChange, onSortChange }) => {
               </div>
             </div>
 
-            {/* Sort By */}
-            <div className="space-y-2">
+             <div className="space-y-2">
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
                 <svg className="w-4 h-4 text-amber-600 dark:text-amber-400" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h7a1 1 0 100-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM13 16a1 1 0 102 0v-5.586l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 101.414 1.414L13 10.414V16z" />

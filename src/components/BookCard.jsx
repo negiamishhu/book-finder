@@ -12,8 +12,7 @@ const BookCard = ({ book, onViewDetails, onToggleFavorite, onToggleReadLater, is
   const imgRef = useRef(null)
   const cardRef = useRef(null)
 
-  // Intersection Observer for lazy loading
-  useEffect(() => {
+   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -23,7 +22,7 @@ const BookCard = ({ book, onViewDetails, onToggleFavorite, onToggleReadLater, is
           }
         })
       },
-      { rootMargin: '50px' } // Start loading 50px before the element is visible
+      { rootMargin: '50px' }  
     )
 
     if (cardRef.current) {
@@ -52,12 +51,10 @@ const BookCard = ({ book, onViewDetails, onToggleFavorite, onToggleReadLater, is
       ref={cardRef}
       className="group bg-white dark:bg-gray-800 rounded-2xl shadow-md dark:shadow-gray-900/50 hover:shadow-2xl dark:hover:shadow-gray-900 transition-all duration-500 overflow-hidden flex flex-col h-full border border-gray-200/50 dark:border-gray-700/50 hover:border-blue-300/50 dark:hover:border-blue-600/50 hover:-translate-y-1"
     >
-      {/* Book Cover */}
-      <div className="h-80 bg-gradient-to-br from-slate-100 dark:from-gray-700 via-gray-50 dark:via-gray-800 to-slate-100 dark:to-gray-700 flex items-center justify-center relative overflow-hidden">
+       <div className="h-80 bg-gradient-to-br from-slate-100 dark:from-gray-700 via-gray-50 dark:via-gray-800 to-slate-100 dark:to-gray-700 flex items-center justify-center relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 group-hover:from-blue-500/5 dark:group-hover:from-blue-500/10 group-hover:to-purple-500/5 dark:group-hover:to-purple-500/10 transition-all duration-500 z-10"></div>
         
-        {/* Action Buttons */}
-        {(onToggleFavorite || onToggleReadLater) && (
+         {(onToggleFavorite || onToggleReadLater) && (
           <div className="absolute top-3 right-3 z-20 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             {onToggleFavorite && (
               <button
@@ -98,7 +95,7 @@ const BookCard = ({ book, onViewDetails, onToggleFavorite, onToggleReadLater, is
           </div>
         )}
         
-        {/* Status Badges */}
+    
         {(isFavorite || isReadLater) && (
           <div className="absolute top-3 left-3 z-20 flex flex-col gap-2">
             {isFavorite && (
@@ -120,8 +117,7 @@ const BookCard = ({ book, onViewDetails, onToggleFavorite, onToggleReadLater, is
           </div>
         )}
         
-        {/* Placeholder shown while loading or when error */}
-        {(!isInView || !coverUrl || imageError || !imageLoaded) && (
+         {(!isInView || !coverUrl || imageError || !imageLoaded) && (
           <div className="absolute inset-0 w-full h-full flex items-center justify-center text-gray-400 dark:text-gray-500">
             <div className="flex flex-col items-center gap-2">
               <span className="text-7xl opacity-40 dark:opacity-30 group-hover:opacity-60 dark:group-hover:opacity-50 transition-opacity duration-300">📖</span>
@@ -132,8 +128,7 @@ const BookCard = ({ book, onViewDetails, onToggleFavorite, onToggleReadLater, is
           </div>
         )}
         
-        {/* Lazy-loaded image */}
-        {isInView && coverUrl && !imageError && (
+         {isInView && coverUrl && !imageError && (
           <img
             ref={imgRef}
             src={coverUrl}
@@ -151,8 +146,7 @@ const BookCard = ({ book, onViewDetails, onToggleFavorite, onToggleReadLater, is
         )}
       </div>
 
-      {/* Book Info */}
-      <div className="p-6 flex-1 flex flex-col bg-gradient-to-b from-white dark:from-gray-800 to-gray-50/30 dark:to-gray-900/30">
+       <div className="p-6 flex-1 flex flex-col bg-gradient-to-b from-white dark:from-gray-800 to-gray-50/30 dark:to-gray-900/30">
         <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-1.5 line-clamp-2 leading-snug group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors duration-300">
           {book.title}
         </h3>
@@ -166,8 +160,7 @@ const BookCard = ({ book, onViewDetails, onToggleFavorite, onToggleReadLater, is
         )}
 
         <div className="mt-auto space-y-2.5 pt-3 border-t border-gray-200/60 dark:border-gray-700/60">
-          {/* Ratings - Prominent if available */}
-          {ratings && (
+           {ratings && (
             <div className="flex items-center gap-2 bg-gradient-to-r from-yellow-50 dark:from-yellow-900/30 to-amber-50 dark:to-amber-900/30 px-3 py-2 rounded-lg border border-yellow-200/50 dark:border-yellow-700/50">
               <div className="flex items-center gap-1.5">
                 <span className="text-yellow-500 dark:text-yellow-400 text-lg leading-none">⭐</span>
@@ -182,8 +175,7 @@ const BookCard = ({ book, onViewDetails, onToggleFavorite, onToggleReadLater, is
             </div>
           )}
 
-          {/* Metadata */}
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs">
+           <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs">
             {firstPublished && (
               <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-300">
                 <span className="text-gray-400 dark:text-gray-500">📅</span>
@@ -199,8 +191,7 @@ const BookCard = ({ book, onViewDetails, onToggleFavorite, onToggleReadLater, is
             )}
           </div>
 
-          {/* Subjects */}
-          {subjects.length > 0 && (
+           {subjects.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-2">
               {subjects.map((subject, idx) => (
                 <span
@@ -213,8 +204,7 @@ const BookCard = ({ book, onViewDetails, onToggleFavorite, onToggleReadLater, is
             </div>
           )}
 
-          {/* View Details Button */}
-          {onViewDetails && book.key && (
+           {onViewDetails && book.key && (
             <button
               onClick={() => onViewDetails(book)}
               className="mt-4 w-full px-5 py-3 bg-gradient-to-r from-blue-600 dark:from-blue-500 via-blue-600 dark:via-blue-500 to-indigo-600 dark:to-indigo-500 text-white text-sm font-bold rounded-xl hover:from-blue-700 dark:hover:from-blue-600 hover:via-blue-700 dark:hover:via-blue-600 hover:to-indigo-700 dark:hover:to-indigo-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-[1.02] active:scale-[0.98]"

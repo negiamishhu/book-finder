@@ -10,8 +10,7 @@ const SearchBar = ({ onSearch }) => {
   const [popularSearches, setPopularSearches] = useState([])
   const suggestionRef = useRef(null)
   const inputRef = useRef(null)
-
-  // Popular search terms based on search type
+ 
   const popularSearchOptions = {
     title: [
       'Harry Potter', 'The Great Gatsby', '1984', 'To Kill a Mockingbird',
@@ -29,13 +28,11 @@ const SearchBar = ({ onSearch }) => {
     ]
   }
 
-  // Fetch popular searches when search type changes or component mounts
-  useEffect(() => {
+   useEffect(() => {
     const fetchPopularSearches = async () => {
       try {
         const popularTerms = popularSearchOptions[searchType]
-        // Optionally fetch trending searches from API
-        // For now, use predefined popular searches
+       
         setPopularSearches(popularTerms)
       } catch (error) {
         setPopularSearches(popularSearchOptions[searchType])
@@ -49,8 +46,7 @@ const SearchBar = ({ onSearch }) => {
     onSearch(term, searchType)
   }
 
-  // Debounced search for suggestions
-  useEffect(() => {
+   useEffect(() => {
     if (searchQuery.trim().length < 2) {
       setSuggestions([])
       setShowSuggestions(false)
@@ -82,8 +78,7 @@ const SearchBar = ({ onSearch }) => {
           const data = await response.json()
           const books = data.docs?.slice(0, 5) || []
           
-          // Format suggestions based on search type
-          const formatted = books.map(book => {
+           const formatted = books.map(book => {
             if (searchType === 'title') {
               return {
                 text: book.title,
@@ -113,13 +108,12 @@ const SearchBar = ({ onSearch }) => {
       } finally {
         setLoadingSuggestions(false)
       }
-    }, 250) // 250ms debounce to prevent excessive API calls while keeping it responsive
+    }, 250) 
 
     return () => clearTimeout(timeoutId)
   }, [searchQuery, searchType])
 
-  // Reset suggestions when search type changes
-  useEffect(() => {
+   useEffect(() => {
     setSuggestions([])
     setShowSuggestions(false)
   }, [searchType])
@@ -175,8 +169,7 @@ const SearchBar = ({ onSearch }) => {
       setSelectedIndex(-1)
     }
   }
-
-  // Handle click outside to close suggestions
+ 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (suggestionRef.current && !suggestionRef.current.contains(event.target) &&
@@ -192,8 +185,7 @@ const SearchBar = ({ onSearch }) => {
   return (
     <div className="max-w-8xl mx-8 mb-8 relative">
       <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-        <div className="flex flex-col md:flex-row gap-4">
-          {/* Search Type Selector */}
+        <div className="flex flex-col md:flex-row gap-4"> 
           <div className="flex gap-2 md:w-auto">
             <button
               type="button"
@@ -229,8 +221,7 @@ const SearchBar = ({ onSearch }) => {
               🏷️ Subject
             </button>
           </div>
-
-          {/* Search Input with Suggestions */}
+ 
           <div className="flex-1 flex gap-2 relative">
             <div className="flex-1 relative">
               <input
@@ -252,8 +243,7 @@ const SearchBar = ({ onSearch }) => {
                 aria-expanded={showSuggestions}
                 aria-controls="search-suggestions"
               />
-              
-              {/* Suggestions Dropdown */}
+               
               {showSuggestions && (
                 <div
                   ref={suggestionRef}
@@ -305,17 +295,14 @@ const SearchBar = ({ onSearch }) => {
           </div>
         </div>
         
-        {/* Popular Search Bubbles */}
-        {!searchQuery && popularSearches.length > 0 && (
+         {!searchQuery && popularSearches.length > 0 && (
           <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
             <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
               Popular {searchType === 'title' ? 'Titles' : searchType === 'author' ? 'Authors' : 'Subjects'}
             </div>
             <div className="relative">
-              {/* Gradient fade on left */}
-              <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white dark:from-gray-800 to-transparent z-10 pointer-events-none"></div>
-              {/* Gradient fade on right */}
-              <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white dark:from-gray-800 to-transparent z-10 pointer-events-none"></div>
+               <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white dark:from-gray-800 to-transparent z-10 pointer-events-none"></div>
+               <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white dark:from-gray-800 to-transparent z-10 pointer-events-none"></div>
               
               <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-3 snap-x snap-mandatory scroll-smooth">
                 {popularSearches.slice(0, 8).map((term, index) => (

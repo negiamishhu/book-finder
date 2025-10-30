@@ -15,13 +15,11 @@ const BookDetails = ({ book, onClose }) => {
       setError(null)
 
       try {
-        // Extract work key if it's an edition key
-        let workKey = book.key
+         let workKey = book.key
         if (workKey.startsWith('/works/')) {
           workKey = workKey
         } else if (workKey.startsWith('/books/')) {
-          // Try to get work key from edition
-          const editionKey = workKey.replace('/books/', '')
+           const editionKey = workKey.replace('/books/', '')
           const editionUrl = `https://openlibrary.org/books/${editionKey}.json`
           const editionRes = await fetch(editionUrl)
           if (editionRes.ok) {
@@ -76,8 +74,7 @@ const BookDetails = ({ book, onClose }) => {
         className="bg-white dark:bg-gray-800 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close Button */}
-        <button
+         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-2xl font-bold bg-white dark:bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center shadow-md hover:shadow-lg transition-all"
           aria-label="Close"
@@ -87,11 +84,9 @@ const BookDetails = ({ book, onClose }) => {
 
         <div className="p-6 md:p-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-            {/* Cover */}
-            <div className="md:col-span-1">
+             <div className="md:col-span-1">
               <div className="bg-gradient-to-br from-gray-200 dark:from-gray-700 to-gray-300 dark:to-gray-800 rounded-lg flex items-center justify-center h-80 relative overflow-hidden">
-                {/* Placeholder */}
-                {(!coverUrl || imageError || !imageLoaded) && (
+                 {(!coverUrl || imageError || !imageLoaded) && (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <span className="text-8xl opacity-40 dark:opacity-30">📖</span>
                     {coverUrl && !imageError && !imageLoaded && (
@@ -101,8 +96,7 @@ const BookDetails = ({ book, onClose }) => {
                     )}
                   </div>
                 )}
-                
-                {/* Lazy-loaded image */}
+                 
                 {coverUrl && !imageError && (
                   <img
                     src={coverUrl}
@@ -121,8 +115,7 @@ const BookDetails = ({ book, onClose }) => {
               </div>
             </div>
 
-            {/* Basic Info */}
-            <div className="md:col-span-2">
+             <div className="md:col-span-2">
               <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-3">{book.title}</h2>
 
               {authors.length > 0 && (
@@ -188,8 +181,7 @@ const BookDetails = ({ book, onClose }) => {
             </div>
           </div>
 
-          {/* Description */}
-          {loading ? (
+           {loading ? (
             <div className="text-center py-8">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 dark:border-blue-400 mx-auto"></div>
               <p className="text-gray-600 dark:text-gray-400 mt-2">Loading additional details...</p>
@@ -209,8 +201,7 @@ const BookDetails = ({ book, onClose }) => {
             </div>
           )}
 
-          {/* Subjects */}
-          {subjects.length > 0 && (
+           {subjects.length > 0 && (
             <div className="mb-6">
               <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3">Subjects & Topics</h3>
               <div className="flex flex-wrap gap-2">
@@ -226,8 +217,7 @@ const BookDetails = ({ book, onClose }) => {
             </div>
           )}
 
-          {/* Additional Details from Works API */}
-          {details && (
+           {details && (
             <div className="space-y-4">
               {details.subjects && details.subjects.length > 0 && (
                 <div>

@@ -8,7 +8,7 @@ import FilterAndSort from './components/FilterAndSort'
 import SearchHistory from './components/SearchHistory'
 
 function App() {
-  const [books, setBooks] = useState([]) // Original books from API
+  const [books, setBooks] = useState([]) 
   const [filters, setFilters] = useState({
     author: '',
     subject: '',
@@ -21,7 +21,7 @@ function App() {
   const [error, setError] = useState(null)
   const [hasSearched, setHasSearched] = useState(false)
   const [selectedBook, setSelectedBook] = useState(null)
-  const [activeTab, setActiveTab] = useState('search') // 'search', 'favorites', 'readLater'
+  const [activeTab, setActiveTab] = useState('search')  
   const [favorites, setFavorites] = useState([])
   const [readLater, setReadLater] = useState([])
   const [currentQuery, setCurrentQuery] = useState('')
@@ -29,17 +29,15 @@ function App() {
   const [offset, setOffset] = useState(0)
   const [hasMore, setHasMore] = useState(false)
   const [totalResults, setTotalResults] = useState(0)
-  const [darkMode, setDarkMode] = useState(() => {
-    // Check localStorage or default to dark mode
+  const [darkMode, setDarkMode] = useState(() => { 
     const saved = localStorage.getItem('darkMode')
     if (saved !== null) {
       return saved === 'true'
     }
-    return true // Default to dark mode
+    return true  
   })
 
-  // Load favorites and readLater from localStorage on mount
-  useEffect(() => {
+   useEffect(() => {
     const savedFavorites = localStorage.getItem('bookFavorites')
     const savedReadLater = localStorage.getItem('bookReadLater')
     if (savedFavorites) {
@@ -58,8 +56,7 @@ function App() {
     }
   }, [])
 
-  // Update dark mode class on document
-  useEffect(() => {
+   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add('dark')
       localStorage.setItem('darkMode', 'true')
@@ -73,8 +70,7 @@ function App() {
     setDarkMode(!darkMode)
   }
 
-  // Favorites management
-  const toggleFavorite = (book) => {
+   const toggleFavorite = (book) => {
     const bookKey = book.key || JSON.stringify(book)
     const isFavorite = favorites.some(fav => (fav.key || JSON.stringify(fav)) === bookKey)
     
@@ -94,8 +90,7 @@ function App() {
     return favorites.some(fav => (fav.key || JSON.stringify(fav)) === bookKey)
   }
 
-  // Read Later management
-  const toggleReadLater = (book) => {
+   const toggleReadLater = (book) => {
     const bookKey = book.key || JSON.stringify(book)
     const isInReadLater = readLater.some(item => (item.key || JSON.stringify(item)) === bookKey)
     
@@ -115,27 +110,23 @@ function App() {
     return readLater.some(item => (item.key || JSON.stringify(item)) === bookKey)
   }
 
-  // Filter books based on filters
-  const filteredBooks = useMemo(() => {
+   const filteredBooks = useMemo(() => {
     return books.filter(book => {
-      // Author filter - exact match since we're using dropdown
-      if (filters.author) {
+       if (filters.author) {
         const bookAuthors = book.author_name || []
         if (!bookAuthors.some(author => author === filters.author)) {
           return false
         }
       }
 
-      // Subject filter - exact match since we're using dropdown
-      if (filters.subject) {
+       if (filters.subject) {
         const bookSubjects = book.subject || []
         if (!bookSubjects.some(subject => subject === filters.subject)) {
           return false
         }
       }
 
-      // Year range filter
-      const publishYear = book.first_publish_year
+       const publishYear = book.first_publish_year
       if (filters.yearMin && filters.yearMin.trim() !== '' && publishYear) {
         const minYear = parseInt(filters.yearMin)
         if (!isNaN(minYear) && publishYear < minYear) {
@@ -153,7 +144,7 @@ function App() {
     })
   }, [books, filters])
 
-  // Sort filtered books
+  
   const sortedBooks = useMemo(() => {
     const filtered = [...filteredBooks]
 
@@ -162,14 +153,14 @@ function App() {
         return filtered.sort((a, b) => {
           const yearA = a.first_publish_year || 0
           const yearB = b.first_publish_year || 0
-          return yearB - yearA // Descending (newest first)
+          return yearB - yearA   
         })
 
       case 'oldest':
         return filtered.sort((a, b) => {
           const yearA = a.first_publish_year || 9999
           const yearB = b.first_publish_year || 9999
-          return yearA - yearB // Ascending (oldest first)
+          return yearA - yearB 
         })
 
       case 'alphabetical':
@@ -181,7 +172,7 @@ function App() {
 
       case 'relevance':
       default:
-        // Keep original order (from API relevance)
+    
         return filtered
     }
   }, [filteredBooks, sortBy])
@@ -211,7 +202,7 @@ function App() {
     try {
       let url = ''
       const query = encodeURIComponent(searchQuery.trim())
-      const limit = 50 // Results per page
+      const limit = 50 
       const offset = pageOffset
 
       switch (searchType) {
@@ -251,12 +242,32 @@ function App() {
         setOffset(limit)
         const currentCount = newBooks.length
         setHasMore(currentCount < total)
+        
+        // Save search history
+        try {
+          const existingHistory = localStorage.getItem('bookSearchHistory')
+          const history = existingHistory ? JSON.parse(existingHistory) : []
+          const newEntry = { 
+            query: searchQuery.trim(), 
+            type: searchType, 
+            timestamp: new Date().toISOString() 
+          }
+          
+          // Remove duplicates and add new entry at the beginning
+          const filteredHistory = history.filter(
+            item => !(item.query === newEntry.query && item.type === newEntry.type)
+          )
+          const updatedHistory = [newEntry, ...filteredHistory].slice(0, 10)
+          
+          localStorage.setItem('bookSearchHistory', JSON.stringify(updatedHistory))
+        } catch (e) {
+          console.error('Error saving search history:', e)
+        }
       }
 
       setTotalResults(total)
       
-      // Reset filters and sort when new search is performed
-      if (!append) {
+       if (!append) {
         setFilters({ author: '', subject: '', yearMin: '', yearMax: '' })
         setSortBy('relevance')
       }
@@ -281,44 +292,35 @@ function App() {
 
   // Infinite scroll effect
   useEffect(() => {
-    let timeoutId = null
+    if (activeTab !== 'search') return
+    
+    let isLoading = false
     
     const handleScroll = () => {
-      // Debounce scroll events
-      if (timeoutId) {
-        clearTimeout(timeoutId)
-      }
+      const scrollPosition = window.innerHeight + window.scrollY
+      const documentHeight = document.documentElement.scrollHeight
+      const scrollBottom = documentHeight - scrollPosition
       
-      timeoutId = setTimeout(() => {
-        // Calculate when user is near bottom (within 200px)
-        const scrollPosition = window.innerHeight + window.scrollY
-        const documentHeight = document.documentElement.scrollHeight
-        
-        if (documentHeight - scrollPosition < 200) {
-          // Auto-load more books when near bottom
-          if (activeTab === 'search' && hasMore && !loadingMore && currentQuery) {
-            const nextOffset = offset
-            setOffset(prev => prev + 50)
-            searchBooks(currentQuery, currentSearchType, nextOffset, true)
-          }
-        }
-      }, 100)
+      if (scrollBottom < 300 && !isLoading && hasMore && !loadingMore && currentQuery) {
+        isLoading = true
+        const nextOffset = offset
+        setOffset(prev => prev + 50)
+        searchBooks(currentQuery, currentSearchType, nextOffset, true)
+        setTimeout(() => { isLoading = false }, 1000)
+      }
     }
 
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => {
       window.removeEventListener('scroll', handleScroll)
-      if (timeoutId) clearTimeout(timeoutId)
     }
-  }, [activeTab, hasMore, loadingMore, currentQuery, currentSearchType, offset, searchBooks])
+  }, [activeTab, hasMore, loadingMore, currentQuery, offset, currentSearchType, searchBooks])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 dark:from-gray-900 via-white dark:via-gray-900 to-purple-50 dark:to-gray-900 transition-colors duration-300">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Top Navigation Bar */}
-        <div className="flex justify-end items-center gap-2 mb-6">
-          {/* Tab Navigation */}
-          <div className="fixed top-6 right-32 md:right-40 lg:right-44 z-50 flex items-center gap-1 bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-200 dark:border-gray-700 p-1">
+         <div className="flex justify-end items-center gap-2 mb-6">
+           <div className="fixed top-6 right-32 md:right-40 lg:right-44 z-50 flex items-center gap-1 bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-200 dark:border-gray-700 p-1">
              
                
             <button
@@ -355,8 +357,7 @@ function App() {
             </button>
           </div>
 
-          {/* Dark Mode Toggle */}
-          <button
+           <button
             onClick={toggleDarkMode}
             className="fixed top-6 right-6 z-50 p-3 rounded-full bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-700 hover:scale-110 active:scale-95"
             aria-label="Toggle dark mode"
@@ -374,8 +375,7 @@ function App() {
           </button>
         </div>
 
-        {/* Header */}
-        <header className="text-center mb-8">
+         <header className="text-center mb-8">
           <h1 
             className="text-5xl font-bold text-gray-800 dark:text-gray-100 mb-3 transition-all cursor-pointer hover:text-blue-600 dark:hover:text-blue-400"
             onClick={() => {
@@ -393,39 +393,33 @@ function App() {
           </p>
         </header>
 
-        {/* Rotating Quotes */}
-        {activeTab === 'search' && <RotatingQuotes />}
+         {activeTab === 'search' && <RotatingQuotes />}
 
-        {/* Search Bar - Always visible */}
-        <SearchBar onSearch={(query, type) => {
+         <SearchBar onSearch={(query, type) => {
           setActiveTab('search')
           searchBooks(query, type)
         }} />
 
-        {/* Search History - Show only when no search results or on welcome screen */}
-        {activeTab === 'search' && !hasSearched && !loading && (
+         {activeTab === 'search' && !hasSearched && !loading && (
           <SearchHistory 
             onSearchClick={(query, type) => searchBooks(query, type)}
           />
         )}
 
-        {/* Loading State */}
-        {loading && (
+         {loading && (
           <div className="flex justify-center items-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 dark:border-blue-400"></div>
           </div>
         )}
 
-        {/* Error State */}
-        {error && (
+         {error && (
           <div className="bg-red-100 dark:bg-red-900/30 border-l-4 border-red-500 dark:border-red-400 text-red-700 dark:text-red-300 p-4 rounded mb-6 max-w-2xl mx-auto">
             <p className="font-bold">Error</p>
             <p>{error}</p>
           </div>
         )}
 
-        {/* Tab Content */}
-        {activeTab === 'search' && !loading && hasSearched && (
+         {activeTab === 'search' && !loading && hasSearched && (
           <div className="mt-8 px-4 md:px-6 lg:px-8">
             {books.length === 0 ? (
               <div className="text-center py-12">
@@ -435,15 +429,13 @@ function App() {
               </div>
             ) : (
               <>
-                  {/* Filter and Sort */}
-                  <FilterAndSort
+                   <FilterAndSort
                     books={books}
                     onFilterChange={handleFilterChange}
                     onSortChange={handleSortChange}
                   />
 
-                  {/* Results Count */}
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                     <h2 className="text-2xl font-semibold text-gray-700 dark:text-gray-200 transition-colors">
                       {sortedBooks.length === 0 ? (
                         <span>No books match your filters</span>
@@ -460,8 +452,7 @@ function App() {
                 </h2>
                   </div>
 
-                  {/* Books Grid */}
-                  {sortedBooks.length > 0 ? (
+                   {sortedBooks.length > 0 ? (
                     <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 lg:gap-10 px-2">
                         {sortedBooks.map((book, index) => (
@@ -477,8 +468,7 @@ function App() {
                   ))}
                 </div>
 
-                      {/* Load More Button - Hidden when infinite scroll is active */}
-                      {/* {hasMore && !loadingMore && sortedBooks.length === books.length && (
+                       {/* {hasMore && !loadingMore && sortedBooks.length === books.length && (
                         <div className="flex justify-center mt-10 mb-6">
                           <button
                             onClick={loadMoreBooks}
@@ -494,8 +484,7 @@ function App() {
                         </div>
                       )} */}
 
-                      {/* Loading More Indicator */}
-                      {loadingMore && (
+                       {loadingMore && (
                         <div className="flex justify-center items-center py-8">
                           <div className="flex items-center gap-3">
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 dark:border-blue-400"></div>
@@ -504,8 +493,7 @@ function App() {
                         </div>
                       )}
 
-                      {/* End of Results Message */}
-                      {!hasMore && books.length > 0 && (
+                       {!hasMore && books.length > 0 && (
                         <div className="text-center py-6">
                           <p className="text-sm text-gray-500 dark:text-gray-400">
                             You've reached the end of the results
@@ -604,10 +592,8 @@ function App() {
           </div>
         )}
 
-        {/* Welcome Page */}
-        {activeTab === 'search' && !hasSearched && !loading && <WelcomePage />}
-
-        {/* Book Details Modal */}
+         {activeTab === 'search' && !hasSearched && !loading && <WelcomePage />}
+ 
         {selectedBook && (
           <BookDetails
             book={selectedBook}

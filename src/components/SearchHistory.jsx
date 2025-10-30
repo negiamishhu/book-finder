@@ -12,19 +12,17 @@ const SearchHistory = ({ onSearchClick, onClearHistory }) => {
       try {
         const parsed = JSON.parse(saved)
          const sorted = parsed.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-        setSearchHistory(sorted.slice(0, 10)) // Keep only last 10 searches
+        setSearchHistory(sorted.slice(0, 10))  
       } catch (e) {
         console.error('Error loading search history:', e)
       }
     }
   }, [])
 
-  // Fetch trending books on mount
-  useEffect(() => {
+   useEffect(() => {
     const fetchTrendingBooks = async () => {
       try {
-        // Fetch some popular books for trending section
-        const response = await fetch('https://openlibrary.org/search.json?subject=best_sellers&limit=8&sort=rating desc')
+         const response = await fetch('https://openlibrary.org/search.json?subject=best_sellers&limit=8&sort=rating desc')
         if (response.ok) {
           const data = await response.json()
           setTrendingBooks(data.docs || [])
@@ -37,8 +35,7 @@ const SearchHistory = ({ onSearchClick, onClearHistory }) => {
   }, [])
 
   const handleSearchClick = (query, type) => {
-    // Update search history
-    const newHistory = [
+     const newHistory = [
       { query, type, timestamp: new Date().toISOString() },
       ...searchHistory.filter(item => !(item.query === query && item.type === type))
     ].slice(0, 10)
@@ -107,8 +104,7 @@ const SearchHistory = ({ onSearchClick, onClearHistory }) => {
     }
   }
 
-  // Auto-scroll detection
-  useEffect(() => {
+   useEffect(() => {
     const handleScroll = () => {
       if (carouselRef.current) {
         const scrollWidth = carouselRef.current.scrollWidth / (trendingBooks.length / itemsPerPage)
@@ -131,8 +127,7 @@ const SearchHistory = ({ onSearchClick, onClearHistory }) => {
 
   return (
     <>
-      {/* Recent Searches Section - Only show if user has history */}
-      {searchHistory.length > 0 && (
+       {searchHistory.length > 0 && (
     <div className="max-w-8xl mx-8 mb-8 relative">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
             <div className="flex items-center justify-between mb-4">
@@ -169,8 +164,7 @@ const SearchHistory = ({ onSearchClick, onClearHistory }) => {
         </div>
       )}
 
-      {/* Trending Books Section */}
-      {trendingBooks.length > 0 && (
+       {trendingBooks.length > 0 && (
     <div className="max-w-8xl mx-8 mb-8 relative">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
             <div className="flex items-center justify-between mb-4">
@@ -180,8 +174,7 @@ const SearchHistory = ({ onSearchClick, onClearHistory }) => {
                 </svg>
                 <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">🔥 Trending Books</h3>
               </div>
-            {/* Carousel Navigation Buttons */}
-            {trendingBooks.length > itemsPerPage && (
+             {trendingBooks.length > itemsPerPage && (
               <div className="flex items-center gap-2">
                 <button
                   onClick={handlePrev}
@@ -205,8 +198,7 @@ const SearchHistory = ({ onSearchClick, onClearHistory }) => {
             )}
           </div>
           
-          {/* Carousel Container */}
-          <div className="relative overflow-hidden">
+           <div className="relative overflow-hidden">
             <div 
               ref={carouselRef}
               className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4 scrollbar-hide"
@@ -216,10 +208,8 @@ const SearchHistory = ({ onSearchClick, onClearHistory }) => {
                 WebkitScrollbar: { display: 'none' }
               }}
             >
-              {/* Gradient fade on left */}
-              <div className="absolute left-0 top-0 bottom-4 w-8 bg-gradient-to-r from-white dark:from-gray-800 to-transparent z-10 pointer-events-none"></div>
-              {/* Gradient fade on right */}
-              <div className="absolute right-0 top-0 bottom-4 w-8 bg-gradient-to-l from-white dark:from-gray-800 to-transparent z-10 pointer-events-none"></div>
+               <div className="absolute left-0 top-0 bottom-4 w-8 bg-gradient-to-r from-white dark:from-gray-800 to-transparent z-10 pointer-events-none"></div>
+               <div className="absolute right-0 top-0 bottom-4 w-8 bg-gradient-to-l from-white dark:from-gray-800 to-transparent z-10 pointer-events-none"></div>
               
               {trendingBooks.map((book, index) => (
                 <div 
@@ -231,8 +221,7 @@ const SearchHistory = ({ onSearchClick, onClearHistory }) => {
                     onClick={() => handleSearchClick(book.title, 'title')}
                     className="group relative bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 w-full flex flex-col h-full border border-gray-200 dark:border-gray-700 hover:border-orange-400 dark:hover:border-orange-500"
                   >
-                    {/* Cover Image */}
-                    <div className="w-full aspect-[2/3] bg-gradient-to-br from-slate-100 dark:from-gray-700 via-gray-50 dark:via-gray-800 to-slate-100 dark:to-gray-700 flex items-center justify-center overflow-hidden relative">
+                     <div className="w-full aspect-[2/3] bg-gradient-to-br from-slate-100 dark:from-gray-700 via-gray-50 dark:via-gray-800 to-slate-100 dark:to-gray-700 flex items-center justify-center overflow-hidden relative">
                       {book.cover_i ? (
                         <>
                           <img
@@ -252,12 +241,10 @@ const SearchHistory = ({ onSearchClick, onClearHistory }) => {
                       ) : (
                         <div className="text-5xl text-gray-400 dark:text-gray-500">📖</div>
                       )}
-                      {/* Hover overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                       <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
                     </div>
                     
-                    {/* Card Content */}
-                    <div className="p-3 flex-1 flex flex-col">
+                     <div className="p-3 flex-1 flex flex-col">
                       <h4 className="text-sm font-bold text-gray-900 dark:text-gray-100 line-clamp-2 mb-1 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors leading-tight">
                         {book.title}
                       </h4>
@@ -272,8 +259,7 @@ const SearchHistory = ({ onSearchClick, onClearHistory }) => {
               ))}
             </div>
           </div>
-          
-          {/* Carousel Indicators */}
+           
           {trendingBooks.length > itemsPerPage && (
             <div className="flex justify-center gap-2 mt-4">
               {Array.from({ length: maxIndex + 1 }).map((_, index) => (
