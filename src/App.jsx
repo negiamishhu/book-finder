@@ -1,10 +1,11 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import BookCard from './components/BookCard'
 import SearchBar from './components/SearchBar'
 import WelcomePage from './components/WelcomePage'
 import BookDetails from './components/BookDetails'
 import RotatingQuotes from './components/RotatingQuotes'
 import FilterAndSort from './components/FilterAndSort'
+import SearchHistory from './components/SearchHistory'
 
 function App() {
   const [books, setBooks] = useState([]) // Original books from API
@@ -29,12 +30,12 @@ function App() {
   const [hasMore, setHasMore] = useState(false)
   const [totalResults, setTotalResults] = useState(0)
   const [darkMode, setDarkMode] = useState(() => {
-    // Check localStorage or system preference
+    // Check localStorage or default to dark mode
     const saved = localStorage.getItem('darkMode')
     if (saved !== null) {
       return saved === 'true'
     }
-    return window.matchMedia('(prefers-color-scheme: dark)').matches
+    return true // Default to dark mode
   })
 
   // Load favorites and readLater from localStorage on mount
@@ -193,7 +194,7 @@ function App() {
     setSortBy(newSort)
   }
 
-  const searchBooks = async (searchQuery, searchType, pageOffset = 0, append = false) => {
+  const searchBooks = useCallback(async (searchQuery, searchType, pageOffset = 0, append = false) => {
     if (!searchQuery.trim()) {
       setError('Please enter a search term')
       return
@@ -268,7 +269,7 @@ function App() {
       setLoading(false)
       setLoadingMore(false)
     }
-  }
+  }, [])
 
   const loadMoreBooks = () => {
     if (currentQuery && !loadingMore && hasMore) {
@@ -277,6 +278,39 @@ function App() {
       searchBooks(currentQuery, currentSearchType, nextOffset, true)
     }
   }
+
+  // Infinite scroll effect
+  useEffect(() => {
+    let timeoutId = null
+    
+    const handleScroll = () => {
+      // Debounce scroll events
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
+      
+      timeoutId = setTimeout(() => {
+        // Calculate when user is near bottom (within 200px)
+        const scrollPosition = window.innerHeight + window.scrollY
+        const documentHeight = document.documentElement.scrollHeight
+        
+        if (documentHeight - scrollPosition < 200) {
+          // Auto-load more books when near bottom
+          if (activeTab === 'search' && hasMore && !loadingMore && currentQuery) {
+            const nextOffset = offset
+            setOffset(prev => prev + 50)
+            searchBooks(currentQuery, currentSearchType, nextOffset, true)
+          }
+        }
+      }, 100)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      if (timeoutId) clearTimeout(timeoutId)
+    }
+  }, [activeTab, hasMore, loadingMore, currentQuery, currentSearchType, offset, searchBooks])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 dark:from-gray-900 via-white dark:via-gray-900 to-purple-50 dark:to-gray-900 transition-colors duration-300">
@@ -342,7 +376,16 @@ function App() {
 
         {/* Header */}
         <header className="text-center mb-8">
-          <h1 className="text-5xl font-bold text-gray-800 dark:text-gray-100 mb-3 transition-colors">
+          <h1 
+            className="text-5xl font-bold text-gray-800 dark:text-gray-100 mb-3 transition-all cursor-pointer hover:text-blue-600 dark:hover:text-blue-400"
+            onClick={() => {
+              setHasSearched(false)
+              setActiveTab('search')
+              setBooks([])
+              setError(null)
+            }}
+            title="Click to go to welcome page"
+          >
             📚 Book Finder
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-300 transition-colors">
@@ -358,6 +401,13 @@ function App() {
           setActiveTab('search')
           searchBooks(query, type)
         }} />
+
+        {/* Search History - Show only when no search results or on welcome screen */}
+        {activeTab === 'search' && !hasSearched && !loading && (
+          <SearchHistory 
+            onSearchClick={(query, type) => searchBooks(query, type)}
+          />
+        )}
 
         {/* Loading State */}
         {loading && (
@@ -427,8 +477,8 @@ function App() {
                   ))}
                 </div>
 
-                      {/* Load More Button */}
-                      {hasMore && !loadingMore && sortedBooks.length === books.length && (
+                      {/* Load More Button - Hidden when infinite scroll is active */}
+                      {/* {hasMore && !loadingMore && sortedBooks.length === books.length && (
                         <div className="flex justify-center mt-10 mb-6">
                           <button
                             onClick={loadMoreBooks}
@@ -442,7 +492,7 @@ function App() {
                             </span>
                           </button>
                         </div>
-                      )}
+                      )} */}
 
                       {/* Loading More Indicator */}
                       {loadingMore && (

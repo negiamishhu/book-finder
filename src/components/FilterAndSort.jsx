@@ -162,7 +162,7 @@ const FilterAndSort = ({ books, onFilterChange, onSortChange }) => {
 
       {/* Filter Content */}
       {isExpanded && (
-        <div className="p-6 space-y-6">
+        <div className="p-6 space-y-6 overflow-visible">
           {/* Active Filters Display */}
           {hasActiveFilters && (
             <div className="flex flex-wrap items-center gap-2 pb-4 border-b border-gray-200 dark:border-gray-700">

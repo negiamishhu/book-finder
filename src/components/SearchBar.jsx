@@ -190,7 +190,7 @@ const SearchBar = ({ onSearch }) => {
   }, [])
 
   return (
-    <div className="max-w-4xl mx-auto mb-8 relative">
+    <div className="max-w-8xl mx-8 mb-8 relative">
       <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <div className="flex flex-col md:flex-row gap-4">
           {/* Search Type Selector */}

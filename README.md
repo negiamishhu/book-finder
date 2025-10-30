@@ -11,6 +11,11 @@ A modern React application for finding books using the Open Library Search API. 
 - 🎨 **Beautiful UI**: Modern, responsive design with Tailwind CSS
 - ⚡ **Fast Performance**: Built with Vite for optimal performance
 - 📱 **Responsive**: Works great on desktop, tablet, and mobile devices
+- 🎤 **Voice Search**: Use your microphone to search for books (Web Speech API)
+- 📊 **Search History**: View your recent searches and trending books
+- ⭐ **Favorites**: Save your favorite books for easy access
+- ⏰ **Read Later**: Bookmark books to read later
+- 🌙 **Dark Mode**: Toggle between light and dark themes
 
 ## Technology Stack
 
@@ -51,9 +56,12 @@ The built files will be in the `dist` directory.
 ## Usage
 
 1. Select a search type (Title, Author, or Subject)
-2. Enter your search query
+2. Enter your search query or use the 🎤 microphone button for voice search
 3. Click "Search" to find books
 4. Browse through the results
+5. Click on any book to view detailed information
+6. Star ⭐ books to save to favorites or clock ⏰ to save for later
+7. View your search history and trending books on the home page
 
 ## API
 
@@ -69,7 +77,12 @@ book-finder/
 ├── src/
 │   ├── components/
 │   │   ├── BookCard.jsx
-│   │   └── SearchBar.jsx
+│   │   ├── SearchBar.jsx
+│   │   ├── SearchHistory.jsx
+│   │   ├── BookDetails.jsx
+│   │   ├── FilterAndSort.jsx
+│   │   ├── RotatingQuotes.jsx
+│   │   └── WelcomePage.jsx
 │   ├── App.jsx
 │   ├── main.jsx
 │   └── index.css
