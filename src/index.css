@@ -21,3 +21,58 @@ body {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+/* Custom Scrollbar Styles for Search Suggestions */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(59, 130, 246, 0.5) rgba(229, 231, 235, 0.3);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(229, 231, 235, 0.3);
+  border-radius: 10px;
+  margin: 4px 0;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, rgba(59, 130, 246, 0.6), rgba(99, 102, 241, 0.6));
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.2s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, rgba(59, 130, 246, 0.8), rgba(99, 102, 241, 0.8));
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(to bottom, rgba(37, 99, 235, 0.9), rgba(79, 70, 229, 0.9));
+}
+
+/* Dark mode scrollbar */
+.dark .custom-scrollbar {
+  scrollbar-color: rgba(59, 130, 246, 0.6) rgba(55, 65, 81, 0.5);
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(55, 65, 81, 0.5);
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, rgba(96, 165, 250, 0.7), rgba(129, 140, 248, 0.7));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, rgba(96, 165, 250, 0.9), rgba(129, 140, 248, 0.9));
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(to bottom, rgba(59, 130, 246, 1), rgba(99, 102, 241, 1));
+}

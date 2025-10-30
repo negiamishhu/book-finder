@@ -95,16 +95,16 @@ const RotatingQuotes = () => {
   }, [quotes.length])
 
   return (
-    <div className="max-w-4xl mx-auto ">
+    <div className="max-w-4xl mx-auto mb-8">
       <div className={`transition-opacity duration-500 ${fade ? 'opacity-100' : 'opacity-0'}`}>
-        <div className="text-center">
+        <div className="text-center bg-transparent dark:bg-transparent rounded-xl p-5   dark:shadow-gray-900/50      ">
           <div className="text-2xl mb-2">
             {quotes[currentIndex].emoji}
           </div>
-          <blockquote className="text-sm md:text-base italic text-gray-600 mb-2 leading-relaxed">
+          <blockquote className="text-sm md:text-base italic text-gray-600 dark:text-gray-300 mb-2 leading-relaxed transition-colors">
             "{quotes[currentIndex].text}"
           </blockquote>
-          <p className="text-xs md:text-sm text-gray-500 italic">
+          <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 italic transition-colors">
             — {quotes[currentIndex].author}
           </p>
         </div>
